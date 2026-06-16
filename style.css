@@ -1,0 +1,294 @@
+/* 
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+  | What Have You Made Today? - A simple, fast, and inspirational speed dial for your browser. |
+  | Made for Chrome :: By Corndog                                                              |  
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+*/
+
+@font-face {
+  font-family: "Monoton";
+  src: url("monoton.ttf");
+}
+
+body, html {
+  background-color: #111;
+  color: #ddd;
+  margin: 0;
+  --hover-transition: all 200ms ease;
+  transition: opacity ease-in-out 400ms;
+  font-family: "Arial", sans-serif;
+  min-height: 100vh;
+  background-image: url("background.jpg");
+  background-size: cover;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+#whymt {
+  font-family: "Monoton";
+  font-weight: 400;
+  font-size: 50px;
+  display: block;
+  cursor: pointer;
+  margin: 50 auto;
+}
+
+#whymt span {
+  color: var(--c);
+  text-shadow:
+    0 0 10px,
+    0 0 20px,
+    0 0 30px;
+  transition: all ease 200ms;
+}
+
+#whymt:hover span {
+  color: #ff0;
+  text-shadow:
+    0 0 10px,
+    0 0 20px;
+}
+
+#whymt span:hover {
+  color: #fff;
+  text-shadow:
+    0 0 10px,
+    0 0 20px,
+    0 0 30px,
+    0 0 40px;
+}
+
+/*
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+  |                              Search Bar                              |
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+*/
+
+#searchBar {
+  background-color: #222;
+  border-radius: 2em;
+  padding: 0.5em;
+  border: 1px solid #333;
+  color: #fff;
+  display: flex;
+  transition: var(--hover-transition);
+  width: max(300px, 70%);
+  margin: 0 auto;
+}
+
+#searchBar:hover {
+  background-color: #2a2a2a;
+  border: 1px solid #555;
+}
+
+#search {
+  background-color: #0000;
+  border: none;
+  outline: none;
+  color: #fff;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  user-select: text;
+}
+
+#form {
+  width: 100%;
+  margin: -0.5em 0;
+}
+
+#searchBar button {
+  background-color: #333;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  border-radius: 2em;
+  border: 1px solid #444;
+  transition: var(--hover-transition);
+  cursor: pointer;
+}
+
+#searchBar button:hover {
+  background-color: #444;
+  border: 1px solid #666;
+  animation: geminiHue 1.4s linear infinite;
+}
+
+#gemini svg,
+#gemini svg path {
+  fill: currentColor;
+}
+
+@keyframes geminiHue {
+  0% {
+    color: hsl(0, 100%, 75%);
+  }
+
+  16.67% {
+    color: hsl(60, 100%, 75%);
+  }
+
+  33.33% {
+    color: hsl(120, 100%, 75%);
+  }
+
+  50% {
+    color: hsl(180, 100%, 75%);
+  }
+
+  66.67% {
+    color: hsl(240, 100%, 75%);
+  }
+
+  83.33% {
+    color: hsl(300, 100%, 75%);
+  }
+
+  100% {
+    color: hsl(360, 100%, 75%);
+  }
+}
+
+#searchBar img {
+  width: 20px;
+  height: 20px;
+  margin: auto 0;
+}
+
+/*
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+  |                                Footer                                |
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+*/
+
+footer {
+  text-align: center;
+  font-size: 0.8em;
+  margin-top: auto;
+  padding: 1em;
+  border-top: 1px solid #3334;
+  font-family: monospace;
+  color: #aaa;
+  background: #0006;
+  backdrop-filter: blur(20px);
+}
+
+footer img {
+  vertical-align: middle;
+  height: 1.3em;
+}
+
+
+/*
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+  |                               Favorites                              |
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+*/
+
+#favorites {
+  width: max(300px, 70%);
+  margin: 1rem auto 0;
+  display: flex;
+  flex-direction: row;
+  gap: 0.85rem;
+  justify-content: center;
+}
+
+.favorite-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  box-sizing: border-box;
+  height: 130px;
+  width: 130px;
+  padding: 0.9rem;
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  border-radius: 1rem;
+  border: 1px solid #0000;
+  background: #2227;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  transition: var(--hover-transition);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.favorite-item:hover {
+  border-color: #333;
+  backdrop-filter: blur(5px);
+}
+
+.favorite-item img {
+  width: 48px;
+  height: 48px;
+}
+
+.favorite-item span {
+  font-size: 0.95rem;
+  line-height: 1.1;
+  word-break: break-word;
+}
+
+.button-container {
+  opacity: 0;
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  display: flex;
+  gap: 0.35rem;
+}
+
+.favorite-item:hover .button-container {
+  opacity: 1;
+}
+
+.button-container button {
+  width: 1.8rem;
+  height: 1.8rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid #444;
+  backdrop-filter: blur(5px);
+  background: #0005;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: var(--hover-transition);
+}
+
+.button-container button:hover {
+  background: #000;
+  border-color: #666;
+}
+
+.button-container button img {
+  width: 1rem;
+  height: 1rem;
+}
+
+svg path {
+  transition: all 300ms ease;
+}
+
+.remove:hover svg path {
+  stroke: #f00;
+}
+
+.edit:hover svg path {
+  stroke: #07f;
+}
+
+.new-favorite {
+  border-style: dashed;
+  background: #17171777;
+}
+
