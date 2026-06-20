@@ -2,3 +2,5 @@ desktop.ini
 .vscode
 waste-bin
 DS_Store
+*Zone.Identifier
+local-dev

@@ -23,6 +23,11 @@ body, html {
   user-select: none;
   display: flex;
   flex-direction: column;
+  color-scheme: dark;
+}
+
+svg path {
+  transition: all 300ms ease;
 }
 
 #whymt {
@@ -99,7 +104,7 @@ body, html {
   margin: -0.5em 0;
 }
 
-#searchBar button {
+#gemini {
   background-color: #333;
   color: #fff;
   display: inline-flex;
@@ -111,52 +116,27 @@ body, html {
   cursor: pointer;
 }
 
-#searchBar button:hover {
+#gemini:hover {
   background-color: #444;
   border: 1px solid #666;
-  animation: geminiHue 1.4s linear infinite;
-}
-
-#gemini svg,
-#gemini svg path {
-  fill: currentColor;
+  animation: geminiHue 3s linear infinite;
 }
 
 @keyframes geminiHue {
-  0% {
-    color: hsl(0, 100%, 75%);
-  }
-
-  16.67% {
-    color: hsl(60, 100%, 75%);
-  }
-
-  33.33% {
-    color: hsl(120, 100%, 75%);
-  }
-
-  50% {
-    color: hsl(180, 100%, 75%);
-  }
-
-  66.67% {
-    color: hsl(240, 100%, 75%);
-  }
-
-  83.33% {
-    color: hsl(300, 100%, 75%);
-  }
-
-  100% {
-    color: hsl(360, 100%, 75%);
-  }
+  0% {color: #ff2d55}
+  20% {color: #ff9500}
+  40% {color: #ffcc00}
+  60% {color: #34c759}
+  80% {color: #007aff}
+  100% {color: #af52de}
 }
 
-#searchBar img {
-  width: 20px;
-  height: 20px;
-  margin: auto 0;
-}
+/* @keyframes geminiHue {
+  0% {color: #D2412E}
+  33% {color: #F7B100}
+  66% {color: #009554}
+  100% {color: #1669E6}
+} */
 
 /*
   +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
@@ -180,7 +160,6 @@ footer img {
   vertical-align: middle;
   height: 1.3em;
 }
-
 
 /*
   +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
@@ -275,10 +254,6 @@ footer img {
   height: 1rem;
 }
 
-svg path {
-  transition: all 300ms ease;
-}
-
 .remove:hover svg path {
   stroke: #f00;
 }
@@ -292,3 +267,36 @@ svg path {
   background: #17171777;
 }
 
+/*
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+  |                             Github Corner                            |
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+*/
+
+.github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    transform: rotate(-25deg);
+  }
+  40%,
+  80% {
+    transform: rotate(10deg);
+  }
+}
+
+@media (max-width: 500px) {
+  .github-corner:hover .octo-arm {
+    animation: none;
+  }
+  .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+}
