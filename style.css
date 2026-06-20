@@ -20,6 +20,8 @@ body, html {
   min-height: 100vh;
   background-image: url("background.jpg");
   background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   user-select: none;
   display: flex;
   flex-direction: column;
@@ -189,8 +191,8 @@ footer img {
   appearance: none;
   -webkit-appearance: none;
   font: inherit;
-  border-radius: 1rem;
-  border: 1px solid #0000;
+  border-radius: 1.5rem;
+  border: 1.5px solid #0000;
   background: #2227;
   color: #fff;
   text-decoration: none;
@@ -201,7 +203,7 @@ footer img {
 }
 
 .favorite-item:hover {
-  border-color: #333;
+  border-color: #3334;
   backdrop-filter: blur(5px);
 }
 
@@ -265,6 +267,11 @@ footer img {
 .new-favorite {
   border-style: dashed;
   background: #17171777;
+  border-color: #666;
+}
+
+.new-favorite:hover {
+  border-color: #888;
 }
 
 /*
