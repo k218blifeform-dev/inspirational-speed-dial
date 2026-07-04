@@ -5,7 +5,15 @@
     <title>New Tab</title>
     <meta charset="UTF-8" />
   </head>
-  <body id="main">
+  <body id="main" style="opacity: 0;">
+    <a id="weather" href="https://google.com/search?q=weather">
+      <img id="weather-icon" alt="Weather icon" />
+      <span class="weather-text">
+        <span id="weather-temp"></span>
+        <span id="weather-condition"></span>
+      </span>
+    </a>
+
     <a
       href="https://github.com/k218blifeform-dev/inspirational-speed-dial"
       class="github-corner"
@@ -64,9 +72,19 @@
     </div>
 
     <footer>
-      What Have You Made Today? - A simple, fast, and inspirational speed dial for your browser.<br />
-      Made with <img src="github.svg" alt="Github" /> and ❤️ :: By Corndog
-      <img src="corndog.png" style="height: 2em; vertical-align: -5px" />
+      What Have You Made Today? - A simple, fast, and inspirational speed dial for your browser.
+      <br />
+
+      Made with <img src="github.svg" alt="Github" /> and ❤️｜By Corndog <img src="corndog.png" style="height: 2em; vertical-align: -5px" />
+      <br />
+
+      <span style="display: inline-flex;">
+        Weather source&nbsp;
+        <a href="https://open-meteo.com">open-meteo.com</a>
+        &nbsp;Weather location:&nbsp;
+        <div id="weather-location"></div>&nbsp;
+        <button id="weather-change-location" type="button">Change location</button>
+      </span>
     </footer>
 
     <div id="cover"></div>

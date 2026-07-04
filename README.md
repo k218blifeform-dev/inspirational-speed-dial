@@ -7,9 +7,9 @@ You can:
 - Or use AI mode for a in-depth search
 - And last but not least use a browser extention to really make it a new tab page.
 
-<img src="screenshot.png" alt="screenshot" style="max-height:500px;display:flex;margin:0 auto">
+![screenshot](screenshot.png)
 
-<a href="https://inspirational-new-tab.netlify.app">inspirational-new-tab.netlify.app</a>
+[inspirational-new-tab.netlify.app](https://inspirational-new-tab.netlify.app)
 
 # Licence
 

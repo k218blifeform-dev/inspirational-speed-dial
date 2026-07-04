@@ -52,6 +52,310 @@ function gemini() {
 }
 
 // +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+// |                              Weather                                 |
+// +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+
+function getWeatherMetadata(code, isDay = 1) {
+  const weatherByCode = {
+    0: {
+      label: isDay ? "Sunny day" : "Clear night",
+      icon: isDay
+        ? "https://www.metoffice.gov.uk/api/images/file/1svg?prefix=images"
+        : "https://www.metoffice.gov.uk/api/images/file/0svg?prefix=images",
+    },
+    1: {
+      label: isDay ? "Sunny intervals" : "Partly cloudy (night)",
+      icon: isDay
+        ? "https://www.metoffice.gov.uk/api/images/file/3svg?prefix=images"
+        : "https://www.metoffice.gov.uk/api/images/file/2svg?prefix=images",
+    },
+    2: {
+      label: isDay ? "Sunny intervals" : "Partly cloudy (night)",
+      icon: isDay
+        ? "https://www.metoffice.gov.uk/api/images/file/3svg?prefix=images"
+        : "https://www.metoffice.gov.uk/api/images/file/2svg?prefix=images",
+    },
+    3: {
+      label: "Cloudy",
+      icon: "https://www.metoffice.gov.uk/api/images/file/7svg?prefix=images",
+    },
+    45: {
+      label: "Mist",
+      icon: "https://www.metoffice.gov.uk/api/images/file/5svg?prefix=images",
+    },
+    48: {
+      label: "Fog",
+      icon: "https://www.metoffice.gov.uk/api/images/file/6svg?prefix=images",
+    },
+    51: {
+      label: isDay ? "Light rain shower (day)" : "Light rain shower (night)",
+      icon: isDay
+        ? "https://www.metoffice.gov.uk/api/images/file/10svg?prefix=images"
+        : "https://www.metoffice.gov.uk/api/images/file/9svg?prefix=images",
+    },
+    53: {
+      label: "Drizzle",
+      icon: "https://www.metoffice.gov.uk/api/images/file/11svg?prefix=images",
+    },
+    55: {
+      label: "Drizzle",
+      icon: "https://www.metoffice.gov.uk/api/images/file/11svg?prefix=images",
+    },
+    61: {
+      label: "Light rain",
+      icon: "https://www.metoffice.gov.uk/api/images/file/12svg?prefix=images",
+    },
+    63: {
+      label: "Light rain",
+      icon: "https://www.metoffice.gov.uk/api/images/file/12svg?prefix=images",
+    },
+    65: {
+      label: "Heavy rain",
+      icon: "https://www.metoffice.gov.uk/api/images/file/15svg?prefix=images",
+    },
+    71: {
+      label: "Light snow",
+      icon: "https://www.metoffice.gov.uk/api/images/file/24svg?prefix=images",
+    },
+    73: {
+      label: "Light snow",
+      icon: "https://www.metoffice.gov.uk/api/images/file/24svg?prefix=images",
+    },
+    75: {
+      label: "Heavy snow",
+      icon: "https://www.metoffice.gov.uk/api/images/file/27svg?prefix=images",
+    },
+    95: {
+      label: isDay ? "Thunder shower (day)" : "Thunder shower (night)",
+      icon: isDay
+        ? "https://www.metoffice.gov.uk/api/images/file/29svg?prefix=images"
+        : "https://www.metoffice.gov.uk/api/images/file/28svg?prefix=images",
+    },
+    96: {
+      label: isDay ? "Thunder shower (day)" : "Thunder shower (night)",
+      icon: isDay
+        ? "https://www.metoffice.gov.uk/api/images/file/29svg?prefix=images"
+        : "https://www.metoffice.gov.uk/api/images/file/28svg?prefix=images",
+    },
+    99: {
+      label: "Thunder",
+      icon: "https://www.metoffice.gov.uk/api/images/file/30svg?prefix=images",
+    },
+  };
+
+  return weatherByCode[code] || { label: "Unknown", icon: "" };
+}
+
+function getStoredWeatherLocation() {
+  try {
+    return localStorage.getItem("speed-dial-weather-location");
+  } catch {
+    return null;
+  }
+}
+
+function saveWeatherLocation(location) {
+  try {
+    localStorage.setItem("speed-dial-weather-location", location);
+  } catch {
+    // Ignore storage errors.
+  }
+}
+
+function setWeatherVisible(visible) {
+  ["weather-temp", "weather-condition", "weather-location"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.display = visible ? "" : "none";
+    }
+  });
+}
+
+function updateWeatherUI(weather) {
+  if (!weather) {
+    setWeatherVisible(false);
+    return;
+  }
+
+  const tempEl = document.getElementById("weather-temp");
+  const conditionEl = document.getElementById("weather-condition");
+  const locationEl = document.getElementById("weather-location");
+  const iconEl = document.getElementById("weather-icon");
+
+  setWeatherVisible(true);
+
+  if (tempEl) {
+    tempEl.textContent = weather.temperature === null ? "--" : `${Math.round(weather.temperature)}°C`;
+  }
+
+  if (conditionEl) {
+    conditionEl.textContent = weather.description || "Weather unavailable";
+  }
+
+  if (locationEl) {
+    locationEl.textContent = weather.locationName || "Your location";
+  }
+
+  if (iconEl) {
+    if (weather.icon) {
+      iconEl.src = weather.icon;
+      iconEl.alt = weather.description || "Weather icon";
+      iconEl.style.display = "";
+    } else {
+      iconEl.removeAttribute("src");
+      iconEl.style.display = "none";
+    }
+  }
+}
+
+async function resolveWeatherLocation(locationName) {
+  const encoded = encodeURIComponent(locationName.trim());
+  const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encoded}&count=1&language=en&format=json`);
+
+  if (!response.ok) {
+    throw new Error("Location lookup failed");
+  }
+
+  const data = await response.json();
+  const result = data.results?.[0];
+
+  if (!result) {
+    throw new Error("Location not found");
+  }
+
+  return {
+    latitude: result.latitude,
+    longitude: result.longitude,
+    locationName: [result.name, result.admin1, result.country].filter(Boolean).join(", "),
+  };
+}
+
+async function fetchWeather(latitude, longitude) {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,is_day&timezone=auto`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Weather request failed");
+  }
+
+  const data = await response.json();
+  const weatherCode = data.current?.weather_code;
+  const isDay = data.current?.is_day !== 0;
+  const metadata = getWeatherMetadata(weatherCode, isDay);
+
+  return {
+    temperature: data.current?.temperature_2m ?? null,
+    description: metadata.label,
+    icon: metadata.icon,
+    locationName: data.timezone || "Your location",
+  };
+}
+
+async function setWeatherLocation(locationName, { silent = false } = {}) {
+  if (!locationName?.trim()) {
+    if (!silent) {
+      updateWeatherUI(null);
+    }
+    return null;
+  }
+
+  try {
+    const resolved = await resolveWeatherLocation(locationName);
+    saveWeatherLocation(locationName.trim());
+    const weather = await fetchWeather(resolved.latitude, resolved.longitude);
+    const finalWeather = { ...weather, locationName: resolved.locationName };
+    updateWeatherUI(finalWeather);
+    window.weatherData = finalWeather;
+    return finalWeather;
+  } catch {
+    if (!silent) {
+      updateWeatherUI(null);
+    }
+    return null;
+  }
+}
+
+async function promptForWeatherLocation() {
+  const currentLocation = getStoredWeatherLocation() || "";
+  const locationName = window.prompt("Enter your location (city or town)", currentLocation);
+
+  if (locationName === null) {
+    return null;
+  }
+
+  if (!locationName.trim()) {
+    updateWeatherUI(null);
+    return null;
+  }
+
+  return setWeatherLocation(locationName.trim());
+}
+
+function ensureWeatherButton() {
+  const button = document.getElementById("weather-change-location");
+  if (!button || button.dataset.weatherBound === "true") {
+    return;
+  }
+
+  button.dataset.weatherBound = "true";
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    promptForWeatherLocation();
+  });
+}
+
+async function loadWeather(options = {}) {
+  const { latitude, longitude } = options;
+  const storedLocation = getStoredWeatherLocation();
+
+  if (storedLocation) {
+    return setWeatherLocation(storedLocation, { silent: true });
+  }
+
+  if (latitude != null && longitude != null) {
+    try {
+      const weather = await fetchWeather(latitude, longitude);
+      updateWeatherUI(weather);
+      window.weatherData = weather;
+      return weather;
+    } catch {
+      updateWeatherUI(null);
+      return null;
+    }
+  }
+
+  if (navigator.geolocation) {
+    return new Promise((resolve) => {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const weather = await loadWeather({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          resolve(weather);
+        },
+        async () => {
+          const weather = await promptForWeatherLocation();
+          resolve(weather);
+        },
+        { timeout: 8000 }
+      );
+    });
+  }
+
+  return promptForWeatherLocation();
+}
+
+window.loadWeather = loadWeather;
+window.fetchWeather = fetchWeather;
+window.setWeatherLocation = setWeatherLocation;
+window.promptForWeatherLocation = promptForWeatherLocation;
+
+ensureWeatherButton();
+loadWeather().catch(() => {});
+
+// +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
 // |                               Cookies                                |
 // +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
 
@@ -347,7 +651,6 @@ document.getElementById("playlist-close").addEventListener("click", event => {
   document.getElementById("cover").classList.remove("show");
 });
 
-/*
 // +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
 // |                               Show Body                              |
 // +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
@@ -359,7 +662,7 @@ const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 async function showBody() {
   await delay(1000);
   document.getElementById("main").style.opacity = "1";
+  document.getElementById("weather").style.margin = "1em"
 }
 
 showBody();
-*/

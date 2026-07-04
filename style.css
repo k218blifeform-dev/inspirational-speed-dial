@@ -41,6 +41,10 @@ button, a {
   cursor: pointer;
 }
 
+a {
+  color: #07f;
+}
+
 .title {
   font-family: "Monoton";
   font-weight: 400;
@@ -97,7 +101,7 @@ button, a {
 }
 
 #search {
-  background-color: #0000;
+  background: #0000;
   border: none;
   outline: none;
   color: #fff;
@@ -138,13 +142,6 @@ button, a {
   100% {color: #af52de}
 }
 
-/* @keyframes geminiHue {
-  0% {color: #D2412E}
-  33% {color: #F7B100}
-  66% {color: #009554}
-  100% {color: #1669E6}
-} */
-
 /*
   +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
   |                                Footer                                |
@@ -159,8 +156,8 @@ footer {
   border-top: 1px solid #3334;
   font-family: monospace;
   color: #aaa;
-  background: #0006;
-  backdrop-filter: blur(20px);
+  background: #0008;
+  backdrop-filter: blur(40px);
 }
 
 footer img {
@@ -366,7 +363,7 @@ footer img {
 }
 
 #playlist-add {
-  padding: 10;
+  padding: 10px;
   background: #4447;
   border-radius: 2rem;
   border: none;
@@ -412,8 +409,8 @@ footer img {
 }
 
 #playlist .track.playing {
-  border-color: #fff;
-  box-shadow: 5px 5px #fff;
+  border: 1px solid #fff;
+  box-shadow: 10px 10px #fffa;
 }
 
 #playlist .track-info {
@@ -490,4 +487,57 @@ footer img {
   .github-corner .octo-arm {
     animation: octocat-wave 560ms ease-in-out;
   }
+}
+
+/*
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+  |                                Weather                               |
+  +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+*/
+
+#weather {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  box-sizing: border-box;
+  padding: 0.9rem;
+  border-radius: 1.5rem;
+  border: 1.5px solid #0000;
+  background: #2227;
+  color: #fff;
+  text-decoration: none;
+  margin: -1em;
+  transition: all 200ms ease, margin 500ms ease-in-out;
+}
+
+#weather:hover {
+  border-color: #3334;
+  backdrop-filter: blur(5px);
+}
+
+.weather-text {
+  display: flex;
+  flex-direction: column;
+}
+
+#weather-change-location {
+  width: fit-content;
+  background-color: #0000;
+  padding: 0;
+  font-size: 10.4px;
+  color: #07f;
+  text-decoration: underline;
+  border: 0;
+  font-family: monospace;
+}
+
+#weather-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+#weather-condition {
+  color: #aaa;
 }
