@@ -463,6 +463,106 @@ function addFavorite() {
   renderFavorites();
 }
 
+const PLAYLIST_FAVORITES_COOKIE = "speed-dial-playlist-favorites";
+
+function getPlaylistFavorites() {
+  try {
+    return JSON.parse(decodeURIComponent(getCookie(PLAYLIST_FAVORITES_COOKIE) || "[]"));
+  } catch {
+    return [];
+  }
+}
+
+function savePlaylistFavorites(favorites) {
+  setCookie(PLAYLIST_FAVORITES_COOKIE, JSON.stringify(favorites));
+}
+
+function renderPlaylistFavorites() {
+  const container = document.getElementById("playlist-favorites");
+
+  if (!container) {
+    return;
+  }
+
+  const favorites = getPlaylistFavorites();
+
+  const items = favorites
+    .map(
+      (favorite, index) => `
+        <a class="favorite-item" href="${favorite.url}" target="_self" data-playlist-index="${index}">
+          <div class="button-container">
+            <button class="remove" type="button" onclick="event.preventDefault(); removePlaylistFavorite(this);" aria-label="Remove ${favorite.name}">
+              <?xml version="1.0" encoding="utf-8"?><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#0000" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11V17"/><path d="M14 11V17"/><path d="M4 7H20"/><path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z"/><path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z"/></svg>
+            </button>
+            <button class="edit" type="button" onclick="event.preventDefault(); editPlaylistFavorite(this);" aria-label="Edit ${favorite.name}">
+              <?xml version="1.0" encoding="utf-8"?><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path id="Vector" d="M12 8.00012L4 16.0001V20.0001L8 20.0001L16 12.0001M12 8.00012L14.8686 5.13146L14.8704 5.12976C15.2652 4.73488 15.463 4.53709 15.691 4.46301C15.8919 4.39775 16.1082 4.39775 16.3091 4.46301C16.5369 4.53704 16.7345 4.7346 17.1288 5.12892L18.8686 6.86872C19.2646 7.26474 19.4627 7.46284 19.5369 7.69117C19.6022 7.89201 19.6021 8.10835 19.5369 8.3092C19.4628 8.53736 19.265 8.73516 18.8695 9.13061L18.8686 9.13146L16 12.0001M12 8.00012L16 12.0001" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <img src="${getFaviconUrl(favorite.url)}" width="50" height="50" alt="${favorite.name}" />
+          <span>${favorite.name}</span>
+        </a>
+      `
+    )
+    .join("");
+
+  container.innerHTML = `
+    ${items}
+    <button class="favorite-item new-favorite" type="button" onclick="addPlaylistFavorite()">
+      <img src="add.svg" width="50" height="50" alt="Add Site" />
+      <span>Add site</span>
+    </button>`;
+}
+
+function addPlaylistFavorite() {
+  const name = window.prompt("Playlist shortcut name", "Example Site")?.trim();
+  const inputUrl = window.prompt("Playlist shortcut URL", "https://example.com")?.trim();
+
+  if (!name || !inputUrl) {
+    return;
+  }
+
+  const favorites = getPlaylistFavorites();
+  favorites.push({ name, url: normalizeUrl(inputUrl) });
+  savePlaylistFavorites(favorites);
+  renderPlaylistFavorites();
+}
+
+function removePlaylistFavorite(button) {
+  const item = button.closest(".favorite-item");
+  const index = Number(item?.dataset.playlistIndex ?? -1);
+
+  if (index < 0) {
+    return;
+  }
+
+  const favorites = getPlaylistFavorites();
+  favorites.splice(index, 1);
+  savePlaylistFavorites(favorites);
+  renderPlaylistFavorites();
+}
+
+function editPlaylistFavorite(button) {
+  const item = button.closest(".favorite-item");
+  const index = Number(item?.dataset.playlistIndex ?? -1);
+
+  if (index < 0) {
+    return;
+  }
+
+  const favorites = getPlaylistFavorites();
+  const current = favorites[index];
+  const name = window.prompt("Playlist shortcut name", current.name)?.trim();
+  const inputUrl = window.prompt("Playlist shortcut URL", current.url)?.trim();
+
+  if (!name || !inputUrl) {
+    return;
+  }
+
+  favorites[index] = { name, url: normalizeUrl(inputUrl) };
+  savePlaylistFavorites(favorites);
+  renderPlaylistFavorites();
+}
+
 function removeFavorite(button) {
   const item = button.closest(".favorite-item");
   const index = Number(item?.dataset.index ?? -1);
@@ -502,6 +602,9 @@ function editFavorite(button) {
 window.addFavorite = addFavorite;
 window.removeFavorite = removeFavorite;
 window.editFavorite = editFavorite;
+window.addPlaylistFavorite = addPlaylistFavorite;
+window.removePlaylistFavorite = removePlaylistFavorite;
+window.editPlaylistFavorite = editPlaylistFavorite;
 
 function renderPlaylist() {
   const container = document.getElementById("playlist-items");
@@ -633,6 +736,7 @@ document.getElementById("cover").addEventListener("click", () => {
 });
 
 renderFavorites();
+renderPlaylistFavorites();
 renderPlaylist();
 
 // +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
@@ -648,6 +752,22 @@ document.getElementById("view-playlist").addEventListener("click", event => {
 
 document.getElementById("playlist-close").addEventListener("click", event => {
   document.getElementById("playlist").style.display = "none";
+  document.getElementById("cover").classList.remove("show");
+});
+
+// +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+// |                              README.md                              |
+// +−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−+
+
+brightText(document.querySelector("#readme div span"));
+
+document.getElementById("view-readme").addEventListener("click", (event) => {
+  document.getElementById("readme").style.display = "unset";
+  document.getElementById("cover").classList.add("show");
+});
+
+document.getElementById("readme-close").addEventListener("click", (event) => {
+  document.getElementById("readme").style.display = "none";
   document.getElementById("cover").classList.remove("show");
 });
 

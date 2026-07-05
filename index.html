@@ -15,7 +15,7 @@
     </a>
 
     <a
-      href="https://github.com/k218blifeform-dev/inspirational-speed-dial"
+      href="https://github.com/corndog-dev/inspirational-speed-dial"
       class="github-corner"
       aria-label="View source on GitHub"
     >
@@ -63,27 +63,52 @@
       <button id="view-playlist">Playlist →</button>
     </div>
 
-    <div id="playlist">
+    <div id="playlist" class="window">
       <div>
         <span class="title">Playlist</span>
-        <button id="playlist-close"><img src="close.svg" alt="Close playlist"></button>
+        <button id="playlist-close" class="close"><img src="close.svg" alt="Close playlist"></button>
       </div>
+      <div id="playlist-favorites" class="playlist-favorites" aria-label="Playlist favorites"></div>
       <ul id="playlist-items"></ul>
     </div>
 
+    <div id="readme" class="window">
+      <div>
+        <span class="title">README.md</span>
+        <button id="readme-close" class="close"><img src="close.svg" alt="Close readme"></button>
+      </div>
+      You can:
+      <ul>
+        <li>Add favorites</li>
+        <li>See source code with github corner</li>
+        <li>Look at weather</li>
+        <li>Play music with your playlist</li>
+        <li>Search Google or type a URL</li>
+        <li>Or use AI mode for a in-depth search</li>
+        <li>And last but not least use a browser extention to really make it a new tab page.</li>
+      </ul>
+
+      <h2>Licence / sources</h2>
+      Code on terms of the <a href="LICENCE">MIT Licence</a><br>
+      Weather source: <a href="https://open-meteo.com">open-meteo.com</a><br>
+      Github Corners <a href="https://tholman.com/github-corners/">Copyright (c) 2025 Tim Holman under the MIT Licence</a><br>
+      Weather symbols stolen from <a href="https://weather.metoffice.gov.uk/guides/what-does-this-forecast-mean">Met Office</a><br>
+    </div>
+
     <footer>
-      What Have You Made Today? - A simple, fast, and inspirational speed dial for your browser.
+      <span style="display: inline-flex;">
+        What Have You Made Today? - A simple, fast, and inspirational speed dial for your browser.&nbsp;
+        <button id="view-readme" class="a">README.md</button>
+      </span>
       <br />
 
-      Made with <img src="github.svg" alt="Github" /> and ❤️｜By Corndog <img src="corndog.png" style="height: 2em; vertical-align: -5px" />
+      Made with <a href="https://github.com/corndog-dev/inspirational-speed-dial" style="text-decoration: underline;"><img src="github.svg" alt="Github" /></a> and ❤️｜<a href="https://github.com/corndog-dev">By Corndog<img src="corndog.png" style="height: 1.25rem; vertical-align: -5px; margin-left: 0.25rem;" /></a>
       <br />
 
       <span style="display: inline-flex;">
-        Weather source&nbsp;
-        <a href="https://open-meteo.com">open-meteo.com</a>
         &nbsp;Weather location:&nbsp;
         <div id="weather-location"></div>&nbsp;
-        <button id="weather-change-location" type="button">Change location</button>
+        <button id="weather-change-location" type="button" class="a">Change location</button>
       </span>
     </footer>
 
